@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+const { Schema, model } =require("mongoose");
+const bcrypt = require("bcryptjs");
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     trim: true,
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
 userSchema.set('toObject', { virtuals: true })
 userSchema.set('toJSON', { virtuals: true })
 
-userSchema.pre('save', async function (this: any, next) {
+userSchema.pre('save', async function (next) {
   this.password = await this.getHashPassword(this.password, await this.getSalt());
   next();
 })
@@ -48,7 +48,7 @@ userSchema.methods = {
       return "";
     }
   },
-  getHashPassword: async function (password: string, salt: string) {
+  getHashPassword: async function (password, salt) {
     try {
       if (!password) return "";
       else {
@@ -58,13 +58,13 @@ userSchema.methods = {
       return "";
     }
   },
-  comparePassword: async function (plainPassword: string) {
+  comparePassword: async function (plainPassword) {
     try {
-      return await bcrypt.compare(plainPassword, this.hashed_password)
+      return await bcrypt.compare(plainPassword, this.password)
     } catch (err) {
       return false;
     }
   }
 }
 
-export const User = mongoose.model('User', userSchema);
+module.exports = model('User', userSchema);
