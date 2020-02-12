@@ -1,7 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
 import { message } from "antd";
-import { Cookies } from "js-cookie";
+import { Redirect } from "react-router-dom";
 
 class SignOut extends React.Component {
   componentDidMount = async () => {
@@ -15,11 +15,12 @@ class SignOut extends React.Component {
     } catch (err) {
       message.error(err.response.data.message);
     }
+    this.props.isAuthenticated();
     
   }
   render() {
     return (
-      <div>User signout</div>
+      <Redirect to="/signin" />
     )
   }
 }

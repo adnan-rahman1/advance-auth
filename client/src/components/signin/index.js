@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 import axios from "axios";
 import { Col, Form, Icon, Input, Button, Checkbox, message } from "antd";
 
@@ -11,6 +11,9 @@ message.config({
 
 class SignInForm extends React.Component {
 
+  state = {
+    redirect: false,
+  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -28,11 +31,12 @@ class SignInForm extends React.Component {
           withCredentials: true,
           data: { email, password }
         });
-        
+        this.setState({ redirect: res.data.redirect }); 
         message.success({
           content: res.data.message,
           key
         });
+        this.props.isAuthenticated();
         this.props.form.resetFields();
       } catch (err) {
         message.error({
@@ -45,6 +49,10 @@ class SignInForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+
+    if(this.state.redirect) {
+      return <Redirect to="/home" />
+    }
 
     return (
       <Col>

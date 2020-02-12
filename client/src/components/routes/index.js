@@ -6,13 +6,13 @@ import SignIn from "../signin";
 import SignOut from "../signout";
 import ActivateAccount from "../activate-account";
 
-const Routes = () => {
+const Routes = (props) => {
   return (
     <Switch>
-      <Route exact path="/home" component={Home} />
+      <Route exact path="/home" component={() => <Home />} />
       <Route path="/signup" component={SignUp} />
-      <Route path="/signin" component={SignIn} />
-      <Route path="/signout" component={SignOut} />
+      <Route path="/signin" component={() => <SignIn isAuthenticated={props.isAuthenticated}/>} />
+      <Route path="/signout" component={() => <SignOut isAuthenticated={props.isAuthenticated}/>} />
       <Route exact path="/activate-account/:token" component={ActivateAccount} />
     </Switch>
   )

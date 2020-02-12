@@ -6,26 +6,15 @@ const { config } = require("dotenv");
 config();
 sendGridMail.setApiKey(process.env.EMAIL_AUTH_KEY);
 
-exports.test = (req, res) => {
+exports.auth = (req, res) => {
   if (!req.session.userId) {
     res.status(404).send({
+      isAuth: false,
       message: "Please sign in first"
     });
-  }
-  res.status(200).send({
-    message: "You are logged in"
-  })
-}
-exports.home = (req, res) => {
-  const { userId } = req.session;
-  if (!userId) {
-    res.status(404).send({
-      message: "Please sign in first"
-    });
-  }
-  else {
-    console.log(req.headers['cookie'].split("=")[1]);
+  } else {
     res.status(200).send({
+      isAuth: true,
       message: "You are logged in"
     })
   }
@@ -34,7 +23,7 @@ exports.home = (req, res) => {
 exports.signOut = async (req, res) => {
   await req.session.destroy(() => {
     res.clearCookie('sid', { path: "/" }).status(200).send(
-      { message: 'Cookie deleted.' });
+      { message: 'You sign out.' });
   })
 }
 
@@ -130,6 +119,7 @@ exports.signIn = async (req, res) => {
         // res.redirect("/api/home");
         res.status(200).send({
           message: "User sign in successfully",
+          redirect: true
         });
       }
     }
