@@ -41,7 +41,7 @@ class App extends React.Component {
           </Header> 
           <Content style={{ padding: "10px 50px" }}>
             <Row type="flex" justify="center">
-              <Routes isAuthenticated={this.isAuthenticated} />
+              <Routes isAuth={this.state.isAuth} isAuthenticated={this.isAuthenticated} />
             </Row>
           </Content>
           <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
